@@ -1243,7 +1243,7 @@ sub receive_request {
 
 sub decode_request {
     my ($this, $request) = @_;
-    my ($snmp_version, $community, $requestid, $errorstatus, $errorindex, $bindings);
+    my ($snmp_version, $community, $requestid, $errorstatus, $errorindex, $bindings, $non_repeaters, $max_repetitions);
 
     ($snmp_version, $community, $requestid, $errorstatus, $errorindex, $bindings)
 	= decode_by_template ($request, "%{%i%s%*{%i%i%i%@", SNMP_Session::get_request);
@@ -1259,6 +1259,14 @@ sub decode_request {
     {
 	# Its a valid getnext_request
 	return(SNMP_Session::getnext_request, $requestid, $bindings, $community);
+    }
+
+    ($snmp_version, $community, $requestid, $non_repeaters, $max_repetitions, $bindings)
+	= decode_by_template ($request, "%{%i%s%*{%i%i%i%@", SNMP_Session::getbulk_request);
+    if (defined $snmp_version)
+    {
+	# Its a valid getbulk_request
+	return(SNMP_Session::getbulk_request, $requestid, $bindings, $community, $non_repeaters, $max_repetitions);
     }
 
     ($snmp_version, $community, $requestid, $errorstatus, $errorindex, $bindings)
