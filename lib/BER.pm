@@ -359,6 +359,44 @@ value (yet)
 
 sub encode_null () { encode_header (null_tag, 0); }
 
+=head2 encode_nosuchobject() - encode a noSuchObject (RFC 1448).
+
+From RFC 1448:
+=begin text
+If the variable binding's name does not have an OBJECT
+IDENTIFIER prefix which exactly matches the OBJECT
+IDENTIFIER prefix of any variable accessible by this
+request, then its value field is set to `noSuchObject'.
+=end text
+
+=cut
+
+sub encode_nosuchobject () { encode_header (snmp_nosuchobject, 0); }
+
+=head2 encode_nosuchinstance() - encode a noSuchInstance (RFC 1448).
+=begin text
+Otherwise, if the variable binding's name does not
+exactly match the name of a variable accessible by this
+request, then its value field is set to `noSuchInstance'.
+=end text
+=cut
+
+sub encode_nosuchinstance () { encode_header (snmp_nosuchinstance, 0); }
+
+=head2 encode_endofmibview() - encode a endOfMibView (RFC 1448).
+=begin text
+If the requested variable binding's name does not
+lexicographically precede the name of any variable
+accessible by this request, i.e., there is no
+lexicographic successor, then the corresponding variable
+binding produced in the Response-PDU has its value field
+set to 'endOfMibView', and its name field set to the
+variable binding's name in the request.
+=end text
+=cut
+
+sub encode_endofmibview () { encode_header (snmp_endofmibview, 0); }
+
 =head2 encode_sequence()
 
 =head2 encode_tagged_sequence()
